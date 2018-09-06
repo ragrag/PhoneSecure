@@ -84,6 +84,9 @@ app.get('/', (req, res) => {
 //router files
 let users = require('./routes/users');
 app.use('/users', users);
+let api = require('./routes/api');
+app.use('/api', api);
+
 
 //server start
 app.listen(strings.port, () => {

@@ -77,7 +77,7 @@ router.post('/register', [
 
 
 //login route
-router.get('/login', (req, res) => {
+router.get('/login',passport.authenticate('jwt', {session: false}), (req, res) => {
     res.render('login');
 });
 
@@ -88,6 +88,8 @@ router.post('/login', (req, res,next) => {
         failureFlash : true
  
     })(req,res,next);
+
+
 });
 
 //Logout
