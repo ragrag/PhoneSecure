@@ -1,0 +1,19 @@
+extends base
+
+block content 
+  .row(id="loginBox")
+    .col-6.offset-3
+      h1 Login
+      form(method='POST', action='/users/login')
+        #form-group
+          label Email:
+          input.form-control(name='username', type='text')
+        #form-group
+          label Password:
+          input.form-control(name='password', type='password')     
+        
+        a.postLink(href="/users/forgot")
+          span Forgot password?
+        br
+        br
+        input.btn2.btn.btn-primary(type='submit',value='Login')    
