@@ -17,6 +17,11 @@ const PhoneSchema = mongoose.Schema({
         type: ObjectId,  ref: 'Location',
         required: false
         }],
+
+    user: {
+        type: ObjectId,  ref: 'User',
+        required: false
+        },
  
 });
 

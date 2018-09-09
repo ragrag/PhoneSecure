@@ -78,8 +78,11 @@ router.post('/register', [
 
 //login route
 router.get('/login',passport.authenticate('jwt', {session: false}), (req, res) => {
+    console.log(req.user);
     res.render('login');
 });
+
+
 
 router.post('/login', (req, res,next) => {
     passport.authenticate('local', {

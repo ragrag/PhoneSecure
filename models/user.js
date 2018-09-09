@@ -19,10 +19,7 @@ const UserSchema = mongoose.Schema({
     },
 
 
-    phones: [{
-        type: ObjectId,  ref: 'Phone',
-        required: false
-        }],
+   
 });
 
 const User = module.exports = mongoose.model('User',UserSchema);
