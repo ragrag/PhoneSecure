@@ -44,6 +44,7 @@ router.post('/login', function (req, res, next) {
 router.post('/checkdevice', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
+ 
     Phone.findOne({
         imei: req.imei
     }).populate('user').exec((err, phone) => {
@@ -53,7 +54,8 @@ router.post('/checkdevice', passport.authenticate('jwt', {
                 message: 'An error occured while fetching phone data'
             });
         } else if (phone) {
-            if (phone.user._id === req.user._id) {
+
+            if (phone.user._id.equals(req.user._id)) {
                 return res.json({
                     success: true,
                     found: true,
@@ -69,7 +71,8 @@ router.post('/checkdevice', passport.authenticate('jwt', {
         } else if (!phone) {
             return res.json({
                 success: true,
-                found: false
+                found: false,
+                owner: false
             });
         }
     });
@@ -77,73 +80,51 @@ router.post('/checkdevice', passport.authenticate('jwt', {
 
 
 //Add Device
-router.post('/adddevice', passport.authenticate('jwt', {
+router.post('/addevice', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-    Phone.findOne({
-        imei: req.imei
-    }).populate('user').exec((err, phone) => {
-        if (err) {
-            return res.json({
-                success: false,
-                message: 'An error occured while fetching phone data'
-            });
-        } else if (phone) {
-            if (phone.user._id === req.user._id) {
-                return res.json({
-                    success: true,
-                    found: true,
-                    owner: true
-                });
-            } else {
-                return res.json({
-                    success: true,
-                    found: true,
-                    owner: false
-                });
-            }
-        } else if (!phone) {
+    
+    let phone = new Phone({
+        imei: req.imei,
+        user:req.user._id
+      });
+      
+      let upsertData = phone.toObject();
+      delete upsertData._id;
+      Phone.update({imei: phone.imei}, upsertData, {upsert: true}, (err,_phone)=>{
+        if(err)
+        return res.json({
+            success: false,
+            message:'An error occured while adding device to your account'
+        });
+        else{
             return res.json({
                 success: true,
-                found: false
             });
         }
-    });
+
+      });
 });
 
 
 
 
 //Remove Device
-router.post('/removdevice', passport.authenticate('jwt', {
+router.post('/removedevice', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-    Phone.findOne({
+    console.log("two");
+    Phone.findOneAndRemove({
         imei: req.imei
-    }).populate('user').exec((err, phone) => {
+    },(err) => {
         if (err) {
             return res.json({
                 success: false,
-                message: 'An error occured while fetching phone data'
+                message: 'An error occured while removing device from your account'
             });
-        } else if (phone) {
-            if (phone.user._id === req.user._id) {
-                return res.json({
-                    success: true,
-                    found: true,
-                    owner: true
-                });
-            } else {
-                return res.json({
-                    success: true,
-                    found: true,
-                    owner: false
-                });
-            }
-        } else if (!phone) {
+        } else {
             return res.json({
                 success: true,
-                found: false
             });
         }
     });

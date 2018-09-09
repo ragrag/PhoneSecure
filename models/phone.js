@@ -3,10 +3,6 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 //Phone Schema
 const PhoneSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
 
     imei: {
         type: String,
