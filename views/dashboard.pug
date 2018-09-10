@@ -1,0 +1,24 @@
+extends base
+
+block content
+    if user
+        .row
+           .col.mx-auto(align="center")
+                h1 Your Devices (#{phones.length}):
+                ul.list-unstyled
+                    if (phones.length >0)
+                        each phone, i in phones
+                            li
+                                a( href="/phone/"+phone.imei)
+                                    div
+                                        h4 #{phone.manf}
+                                        h4 #{phone.model}
+                    else 
+                        li 
+                            h4 No Devices linked to your account
+    else
+        h1 USER DOESNT EXIST
+
+
+      
+  

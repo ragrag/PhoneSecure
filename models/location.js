@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 //User Schema
 const LocationSchema = mongoose.Schema({
     
-    data:{
-        long: String,
-        lat: String ,
-        required: true
+  
+    long:{
+        type:String,
+        required:true,
     },
-
+    Lat:{
+        type:String,
+        required:true
+    },
 
     date: {
         type: Date,

@@ -7,9 +7,13 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const strings = require('./config/strings')
+require('dotenv').config()
 
 
 
+//Fetch models
+let User = require('./models/user');
+let Phone = require('./models/phone');
 
 //connect and select db
 mongoose.connect(strings.database);
@@ -73,6 +77,15 @@ res.locals.user = req.user || null;
 next(); 
 });
 
+
+//FOREST ADMIN
+app.use(require('forest-express-mongoose').init({
+    modelsDir: __dirname + '/models',
+    envSecret: process.env.FOREST_ENV_SECRET,
+    authSecret: process.env.FOREST_AUTH_SECRET,
+    mongoose: require('mongoose')
+  }));
+
 //home route
 app.get('/', (req, res) => {
 
@@ -81,12 +94,43 @@ app.get('/', (req, res) => {
     });
 });
 
+
+//Dashboard route
+app.get('/dashboard',ensureAuthenticated, (req, res) => {
+
+    Phone.find({user:req.user._id}, (err,phones)=>{
+
+        if(err)
+            {
+                console.log(err);
+
+            }
+        else {
+            res.render('dashboard',{phones:phones});
+        }
+
+    });
+
+    
+});
+
+
 //router files
 let users = require('./routes/users');
 app.use('/users', users);
 let api = require('./routes/api');
 app.use('/api', api);
 
+
+//Access Coontrol
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('danger', 'Please login first');
+        res.redirect('/users/login');
+    }
+}
 
 //server start
 app.listen(strings.port, () => {

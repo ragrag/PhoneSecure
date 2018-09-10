@@ -4,9 +4,19 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 //Phone Schema
 const PhoneSchema = mongoose.Schema({
 
+    manf:{
+        type:String,
+        required:true
+    },
+    model:{
+        type:String,
+        required:true
+    },
+
     imei: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
 
     locationHistory: [{

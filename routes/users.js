@@ -77,7 +77,7 @@ router.post('/register', [
 
 
 //login route
-router.get('/login',passport.authenticate('jwt', {session: false}), (req, res) => {
+router.get('/login', (req, res) => {
     console.log(req.user);
     res.render('login');
 });

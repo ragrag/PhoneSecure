@@ -46,7 +46,7 @@ router.post('/checkdevice', passport.authenticate('jwt', {
 }), (req, res) => {
  
     Phone.findOne({
-        imei: req.imei
+        imei: req.body.imei
     }).populate('user').exec((err, phone) => {
         if (err) {
             return res.json({
@@ -55,6 +55,7 @@ router.post('/checkdevice', passport.authenticate('jwt', {
             });
         } else if (phone) {
 
+      
             if (phone.user._id.equals(req.user._id)) {
                 return res.json({
                     success: true,
@@ -85,9 +86,14 @@ router.post('/addevice', passport.authenticate('jwt', {
 }), (req, res) => {
     
     let phone = new Phone({
-        imei: req.imei,
+        imei: req.body.imei,
+        manf:req.body.manf,
+        model:req.body.model,
         user:req.user._id
       });
+      console.log(req);
+      console.log(phone.manf);
+      console.log(phone);
       
       let upsertData = phone.toObject();
       delete upsertData._id;
@@ -113,9 +119,9 @@ router.post('/addevice', passport.authenticate('jwt', {
 router.post('/removedevice', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-    console.log("two");
+   
     Phone.findOneAndRemove({
-        imei: req.imei
+        imei: req.body.imei
     },(err) => {
         if (err) {
             return res.json({
