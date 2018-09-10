@@ -3,6 +3,19 @@ html
   head
     title PhoneSecure
 
+    script(src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js")
+    script(src="https://www.gstatic.com/firebasejs/5.4.1/firebase-messaging.js")
+    script.
+      // Initialize Firebase
+      var config = {
+      apiKey: "AIzaSyC84Ff1QvPjUk7arfixaQzZCVUernhvDPY",
+      authDomain: "phone-e17cc.firebaseapp.com",
+      databaseURL: "https://phone-e17cc.firebaseio.com",
+      projectId: "phone-e17cc",
+      storageBucket: "phone-e17cc.appspot.com",
+      messagingSenderId: "275158632515"
+      };  
+      firebase.initializeApp(config);
 
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css')
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/components-font-awesome@5.0.6/css/fontawesome-all.min.css')
@@ -64,4 +77,4 @@ html
 
     script( src='https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js')
     script( src='https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.min.js')
-    script( src='/js/main-min.js')
+    script( src='/js/main.js')
