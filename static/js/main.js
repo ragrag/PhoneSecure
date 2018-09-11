@@ -24,7 +24,15 @@ $(document).ready(() => {
 
       const messaging = firebase.messaging();
 
+      messaging.onMessage(function(payload) {
+        console.log('Message received. ', payload);
+        // ...
+      });
+      
+
       $('.sendMsg').on('click', (e) => {
+        $target = $(e.target);
+        const imei = $target.attr('data');
       $.ajax({        
         type : 'POST',
         url : "https://fcm.googleapis.com/fcm/send",
@@ -34,7 +42,8 @@ $(document).ready(() => {
         contentType : 'application/json',
         dataType: 'json',
         data: JSON.stringify({
-            "to": "/topics/test", 
+            "to": "/topics/"+imei, 
+            "priority": "high",
             "data": {
             "message": "Testing"
             }

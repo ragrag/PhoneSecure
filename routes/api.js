@@ -45,6 +45,7 @@ router.post('/checkdevice', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
  
+    console.log("TEST API IN");
     Phone.findOne({
         imei: req.body.imei
     }).populate('user').exec((err, phone) => {
@@ -135,6 +136,31 @@ router.post('/removedevice', passport.authenticate('jwt', {
         }
     });
 });
+
+
+//Update Last Location
+router.post('/locate', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+   
+    Phone.findOne({
+        imei: req.body.imei
+    },(err,phone) => {
+        if (err) {
+     console.log(err);
+        } else {
+            phone.lastSeen.long = req.body.long;
+            phone.lastSeen.lat = req.body.lat;
+            phone.lastSeen.battery = req.body.battery;
+            console.log(phone);
+            phone.save((err)=>{
+                if(err)
+                    console.log(err);
+            });
+        }
+    });
+});
+
 
 
 

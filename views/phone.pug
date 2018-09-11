@@ -1,0 +1,19 @@
+extends base
+
+block content
+    if phone
+        h2 
+            | #{phone.manf}
+            br
+            | #{phone.model}
+        br
+        button.sendMsg(data=phone.imei)
+                |Locate
+        div#coords
+   
+    else
+        h1 PHONE DOESNT EXIST
+
+
+      
+  

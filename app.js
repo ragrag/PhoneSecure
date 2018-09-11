@@ -120,6 +120,8 @@ let users = require('./routes/users');
 app.use('/users', users);
 let api = require('./routes/api');
 app.use('/api', api);
+let phoneRoute = require('./routes/phone');
+app.use('/phone', phoneRoute);
 
 
 //Access Coontrol

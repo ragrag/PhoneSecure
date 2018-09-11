@@ -2,8 +2,6 @@ extends base
 
 block content
     if user
-        button.sendMsg
-            |dasd
         .row
            .col.mx-auto(align="center")
                 h1 Your Devices (#{phones.length}):
@@ -11,10 +9,12 @@ block content
                     if (phones.length >0)
                         each phone, i in phones
                             li
-                                a( href="/phone/"+phone.imei)
+                                
                                     div
-                                        h4 #{phone.manf}
-                                        h4 #{phone.model}
+                                        a( href="/phone/"+phone._id)
+                                            | #{phone.manf}
+                                            br
+                                            | #{phone.model}
                     else 
                         li 
                             h4 No Devices linked to your account

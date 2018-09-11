@@ -24,6 +24,12 @@ const PhoneSchema = mongoose.Schema({
         required: false
         }],
 
+    lastSeen:{
+        long: String,
+        lat: String ,
+        battery:String,
+        required: false
+    },
     user: {
         type: ObjectId,  ref: 'User',
         required: false
