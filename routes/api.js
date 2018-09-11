@@ -139,10 +139,10 @@ router.post('/removedevice', passport.authenticate('jwt', {
 
 
 //Update Last Location
-router.post('/locate', passport.authenticate('jwt', {
+router.post('/updatelocation', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-   
+   console.log(req.body);
     Phone.findOne({
         imei: req.body.imei
     },(err,phone) => {
@@ -152,11 +152,33 @@ router.post('/locate', passport.authenticate('jwt', {
             phone.lastSeen.long = req.body.long;
             phone.lastSeen.lat = req.body.lat;
             phone.lastSeen.battery = req.body.battery;
+            phone.lastSeen.date = Date.now();
             console.log(phone);
             phone.save((err)=>{
                 if(err)
                     console.log(err);
             });
+        }
+    });
+});
+
+
+
+//Get Last Location
+router.post('/getlocation',  (req, res) => {
+  console.log(req.body.id);
+    Phone.findById(
+         req.body.id
+    ,(err,phone) => {
+        if (err) {
+     console.log(err);
+        } else {
+            
+            return res.json({
+                success: true,
+                data:phone.lastSeen,
+            });
+
         }
     });
 });

@@ -9,7 +9,7 @@ const {
 //Fetch models
 let Phone = require('../models/phone');
 
-router.get('/:id', (req, res)=>{
+router.get('/:id', ensureAuthenticated,(req, res)=>{
 
 
     Phone.findById(req.params.id,(err,phone)=>{
@@ -18,5 +18,17 @@ router.get('/:id', (req, res)=>{
 
     });
 });
+
+
+
+//Access Coontrol
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        req.flash('danger', 'Please login first');
+        res.redirect('/users/login');
+    }
+}
 
 module.exports = router;

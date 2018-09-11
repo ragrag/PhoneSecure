@@ -28,6 +28,10 @@ const PhoneSchema = mongoose.Schema({
         long: String,
         lat: String ,
         battery:String,
+        date:{
+            type:Date,
+            default: Date.now
+        },
         required: false
     },
     user: {
