@@ -30,30 +30,59 @@ $(document).ready(() => {
       });
       
 
+      function setIntervalX(callback, delay, repetitions) {
+        var x = 0;
+        var intervalID = window.setInterval(function () {
+    
+           callback();
+    
+           if (++x === repetitions) {
+               window.clearInterval(intervalID);
+           }
+        }, delay);
+    }
+      function getCoordinates(id)
+      {
+          console.log('Called');
+        $.ajax({        
+            type : 'POST',
+            url : "/api//getlocation",
+            data:{
+                id:id
+            },
+            success : function(response) {
+               // console.log(response);
+                $('#lastSeen').html('last seen : '+moment(response.data.date).fromNow());
+                $('#coords').html('long : '+response.data.long +'<br>lat : '+response.data.lat);
+                $('#battery').html('battery level : '+response.data.battery +'%');
+
+            },
+            error : function(err) {
+                console.log(err);               
+            }
+        });
+
+
+      }
+
       $('.sendMsg').on('click', (e) => {
         $target = $(e.target);
         const imei = $target.attr('data');
+        const id = $target.attr('dataid');
       $.ajax({        
         type : 'POST',
-        url : "https://fcm.googleapis.com/fcm/send",
-        headers : {
-            Authorization : 'key=' + 'AIzaSyC84Ff1QvPjUk7arfixaQzZCVUernhvDPY'
+        url : "/api/requestlocation",
+        data:{
+            imei:imei
         },
-        contentType : 'application/json',
-        dataType: 'json',
-        data: JSON.stringify({
-            "to": "/topics/"+imei, 
-            "priority": "high",
-            "data": {
-            "message": "Testing"
-            }
-        }),
         success : function(response) {
-            console.log(response);
+            //console.log(response);
+            setIntervalX(()=>{
+                getCoordinates(id);
+            }, 5000, 5);
         },
-        error : function(xhr, status, error) {
-            console.log(xhr.error);  
-            console.log(error);                 
+        error : function(err) {
+            console.log(err);               
         }
     });
       });

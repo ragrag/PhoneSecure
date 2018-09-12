@@ -7,7 +7,15 @@ block content
             br
             | #{phone.model}
         br
-        button.sendMsg(data=phone.imei)
+        h4 IMEI : #{phone.imei}
+        div
+            span#lastSeen 
+            br
+            span#coords 
+            br
+            spam#battery 
+        br
+        button.sendMsg(data=phone.imei dataid=phone._id )
                 |Locate
         div#coords
    

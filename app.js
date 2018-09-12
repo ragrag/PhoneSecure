@@ -7,7 +7,8 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const strings = require('./config/strings')
-require('dotenv').config()
+const admin = require('firebase-admin');
+require('dotenv').config();
 
 
 
@@ -85,6 +86,14 @@ app.use(require('forest-express-mongoose').init({
     authSecret: process.env.FOREST_AUTH_SECRET,
     mongoose: require('mongoose')
   }));
+
+//FIREBASE ADMIN SDK
+let serviceAccount = require('./config/phone-e17cc-firebase-adminsdk-lb7kb-27c8b1f4da.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://phone-e17cc.firebaseio.com'
+  });
 
 //home route
 app.get('/', (req, res) => {

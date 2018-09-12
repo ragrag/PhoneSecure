@@ -5,7 +5,7 @@ const passport = require('passport');
 const passportJWT = require("passport-jwt");
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-
+const admin = require('firebase-admin');
 
 //Fetch models
 let Phone = require('../models/phone');
@@ -142,7 +142,7 @@ router.post('/removedevice', passport.authenticate('jwt', {
 router.post('/updatelocation', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-   console.log(req.body);
+   
     Phone.findOne({
         imei: req.body.imei
     },(err,phone) => {
@@ -184,7 +184,35 @@ router.post('/getlocation',  (req, res) => {
 });
 
 
+//Send locaiton request
+router.post('/requestlocation', (req,res)=>{
+    let topic = req.body.imei;
 
+    // See documentation on defining a message payload.
+    let message = {
+      android: {
+          priority: 'high',
+        data: {
+        message: 'Testing nodejs',
+      },
+    },
+      topic: topic,
+    
+    };
+    
+    // Send a message to devices subscribed to the provided topic.
+    admin.messaging().send(message)
+      .then((response) => {
+        // Response is a message ID string.
+        console.log(message);
+        console.log('Successfully sent message:', response);
+        return res.json({success:true});        
+      })
+      .catch((error) => {
+        console.log('Error sending message:', error);
+      });
+
+});
 
 
 module.exports = router;
