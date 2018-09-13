@@ -11,6 +11,11 @@ const admin = require('firebase-admin');
 let Phone = require('../models/phone');
 let User = require('../models/user');
 
+router.get('/test',(req,res)=>{
+    console.log('in');
+    return res.json({success:true});
+})
+
 router.post('/login', function (req, res, next) {
     passport.authenticate('local', {
         session: false
@@ -90,7 +95,9 @@ router.post('/addevice', passport.authenticate('jwt', {
         imei: req.body.imei,
         manf:req.body.manf,
         model:req.body.model,
-        user:req.user._id
+        user:req.user._id,
+
+
       });
       console.log(req);
       console.log(phone.manf);
@@ -142,7 +149,7 @@ router.post('/removedevice', passport.authenticate('jwt', {
 router.post('/updatelocation', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
-   
+    console.log('in');
     Phone.findOne({
         imei: req.body.imei
     },(err,phone) => {
@@ -153,6 +160,8 @@ router.post('/updatelocation', passport.authenticate('jwt', {
             phone.lastSeen.lat = req.body.lat;
             phone.lastSeen.battery = req.body.battery;
             phone.lastSeen.date = Date.now();
+            phone.lastSeen.phoneNumber = req.body.phoneNumber;
+            phone.lastSeen.seen =true;
             console.log(phone);
             phone.save((err)=>{
                 if(err)
@@ -173,12 +182,16 @@ router.post('/getlocation',  (req, res) => {
         if (err) {
      console.log(err);
         } else {
-            
-            return res.json({
-                success: true,
-                data:phone.lastSeen,
-            });
+            if (phone.lastSeen.seen)
 
+
+                return res.json({
+                    success: true,
+                    data:phone.lastSeen,
+                });
+            else {
+                return res.json({success:false});
+            }
         }
     });
 });
@@ -190,8 +203,16 @@ router.post('/requestlocation', (req,res)=>{
 
     // See documentation on defining a message payload.
     let message = {
+
       android: {
+
           priority: 'high',
+        //   notification: {
+        //     title: 'Finding your device',
+        //     body: '.',
+        //     icon: 'stock_ticker_update',
+        //     color: '#f45342'
+        //   },
         data: {
         message: 'Testing nodejs',
       },

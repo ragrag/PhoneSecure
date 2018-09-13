@@ -2,22 +2,29 @@ extends base
 
 block content
     if phone
-        h2 
-            | #{phone.manf}
-            br
-            | #{phone.model}
-        br
-        h4 IMEI : #{phone.imei}
-        div
-            span#lastSeen 
-            br
-            span#coords 
-            br
-            spam#battery 
-        br
-        button.sendMsg(data=phone.imei dataid=phone._id )
-                |Locate
-        div#coords
+        .row
+            .col-4
+                h2 
+                    | #{phone.manf}
+                    br
+                    | #{phone.model}
+                br
+                h4 IMEI : #{phone.imei}
+                div
+                    span#lastSeen 
+                    br
+                    span#coords 
+                    br
+                    spam#battery 
+                    br
+                    spam#phoneNumber 
+                br
+                .loader
+                button.sendMsg(data=phone.imei dataid=phone._id )
+                        |Locate
+                div#coords
+            .col    
+                #map
    
     else
         h1 PHONE DOESNT EXIST

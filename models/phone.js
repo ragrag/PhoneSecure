@@ -25,12 +25,16 @@ const PhoneSchema = mongoose.Schema({
         }],
 
     lastSeen:{
+        seen:{
+          type:Boolean,
+          defaulse:false
+        },
         long: String,
         lat: String ,
         battery:String,
+        phoneNumber:String,
         date:{
             type:Date,
-            default: Date.now
         },
         required: false
     },
