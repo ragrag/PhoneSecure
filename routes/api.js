@@ -208,7 +208,7 @@ router.post('/requestlocation', (req,res)=>{
 
           priority: 'high',
         //   notification: {
-        //     title: 'Finding your device',
+        //     title: 'Notification',
         //     body: '.',
         //     icon: 'stock_ticker_update',
         //     color: '#f45342'
