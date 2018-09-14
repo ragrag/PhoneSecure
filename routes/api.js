@@ -200,7 +200,8 @@ router.post('/getlocation',  (req, res) => {
 //Send locaiton request
 router.post('/requestlocation', (req,res)=>{
     let topic = req.body.imei;
-
+    
+    
     // See documentation on defining a message payload.
     let message = {
 
@@ -214,7 +215,7 @@ router.post('/requestlocation', (req,res)=>{
         //     color: '#f45342'
         //   },
         data: {
-        message: 'Testing nodejs',
+        request:req.body.request,
       },
     },
       topic: topic,

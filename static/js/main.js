@@ -58,14 +58,15 @@ $(document).ready(() => {
            }
         }, delay);
     }
-      function getCoordinates(id)
+      function getCoordinates(id,request)
       {
           console.log('Called');
         $.ajax({        
             type : 'POST',
             url : "/api//getlocation",
             data:{
-                id:id
+                id:id,
+                request:request,
             },
             success : function(response) {
                 console.log(response.success);
@@ -94,15 +95,18 @@ $(document).ready(() => {
         $target = $(e.target);
         const imei = $target.attr('data');
         const id = $target.attr('dataid');
+        const request = $target.attr('request');
       $.ajax({        
         type : 'POST',
         url : "/api/requestlocation",
         data:{
-            imei:imei
+            imei:imei,
+            request:request,
         },
         success : function(response) {
             //console.log(response);
             setIntervalX(()=>{
+
                 getCoordinates(id);
             }, 5000, 5);
         },

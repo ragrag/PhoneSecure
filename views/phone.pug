@@ -20,9 +20,21 @@ block content
                     spam#phoneNumber 
                 br
                 .loader
-                button.sendMsg(data=phone.imei dataid=phone._id )
+                button.sendMsg(data=phone.imei dataid=phone._id request='location' )
                         |Locate
-                div#coords
+                br
+                button.sendMsg(data=phone.imei dataid=phone._id request='ring')
+                        |Ring
+                br
+                button.sendMsg(data=phone.imei dataid=phone._id request='camera')
+                        |Camera
+                br
+                button.sendMsg(data=phone.imei dataid=phone._id request='sms')
+                        |Send sms with location details
+                br
+                button.sendMsg(data=phone.imei dataid=phone._id request='notification')
+                        |Send notification message
+                br
             .col    
                 #map
    
