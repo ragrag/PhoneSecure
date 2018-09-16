@@ -96,12 +96,10 @@ router.post('/addevice', passport.authenticate('jwt', {
         manf:req.body.manf,
         model:req.body.model,
         user:req.user._id,
-
-
+        API:req.body.api
       });
       console.log(req);
-      console.log(phone.manf);
-      console.log(phone);
+      console.log('DETAILS ADD ' +phone);
       
       let upsertData = phone.toObject();
       delete upsertData._id;
@@ -183,8 +181,6 @@ router.post('/getlocation',  (req, res) => {
      console.log(err);
         } else {
             if (phone.lastSeen.seen)
-
-
                 return res.json({
                     success: true,
                     data:phone.lastSeen,
@@ -201,12 +197,57 @@ router.post('/getlocation',  (req, res) => {
 router.post('/requestlocation', (req,res)=>{
     let topic = req.body.imei;
     
-    
+    let message= {};
     // See documentation on defining a message payload.
-    let message = {
+   if(req.body.request === 'sms')
+    {
+        console.log("NUMBER : "+req.body.number);
+         message = {
+
+            android: {
+                priority: 'high',
+              //   notification: {
+              //     title: 'Notification',
+              //     body: '.',
+              //     icon: 'stock_ticker_update',
+              //     color: '#f45342'
+              //   },
+              data: {
+              request:req.body.request,
+              number:req.body.number
+            },
+          },
+            topic: topic,
+          
+          };
+    }
+    else if(req.body.request === 'notification')
+    {
+        console.log("Notification : "+req.body.notification);
+         message = {
+
+            android: {
+                priority: 'high',
+                notification: {
+                  title: req.body.notification,
+                  body: req.body.notification,
+                  icon: 'stock_ticker_update',
+                  color: '#f45342',
+                  click_action:'null',
+                },
+              data: {
+              request:req.body.request,
+            },
+          },
+            topic: topic,
+          
+          };
+    }
+
+    else {
+    message = {
 
       android: {
-
           priority: 'high',
         //   notification: {
         //     title: 'Notification',
@@ -216,11 +257,13 @@ router.post('/requestlocation', (req,res)=>{
         //   },
         data: {
         request:req.body.request,
+       
       },
     },
       topic: topic,
     
     };
+}
     
     // Send a message to devices subscribed to the provided topic.
     admin.messaging().send(message)

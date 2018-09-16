@@ -23,11 +23,11 @@ const PhoneSchema = mongoose.Schema({
         type: ObjectId,  ref: 'Location',
         required: false
         }],
-
+        
     lastSeen:{
         seen:{
           type:Boolean,
-          defaulse:false
+          default:false
         },
         long: String,
         lat: String ,
@@ -42,6 +42,11 @@ const PhoneSchema = mongoose.Schema({
         type: ObjectId,  ref: 'User',
         required: false
         },
+
+    API: {
+    type :String,
+    required:false
+    }
  
 });
 

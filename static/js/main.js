@@ -58,6 +58,7 @@ $(document).ready(() => {
            }
         }, delay);
     }
+
       function getCoordinates(id,request)
       {
           console.log('Called');
@@ -76,7 +77,7 @@ $(document).ready(() => {
                 initMap(parseFloat(response.data.long),parseFloat(response.data.lat));
                 $('#lastSeen').html('last seen : '+moment(response.data.date).fromNow());
                 $('#coords').html('long : '+response.data.long +'<br>lat : '+response.data.lat);
-                $('#battery').html('battery level : '+response.data.battery +'%');
+                $('#battery').html('battery level : '+parseInt(response.data.battery) +'%');
                 $('#phoneNumber').html('Phone number* : '+response.data.phoneNumber);
                }
                else {
@@ -96,24 +97,79 @@ $(document).ready(() => {
         const imei = $target.attr('data');
         const id = $target.attr('dataid');
         const request = $target.attr('request');
-      $.ajax({        
-        type : 'POST',
-        url : "/api/requestlocation",
-        data:{
-            imei:imei,
-            request:request,
-        },
-        success : function(response) {
-            //console.log(response);
-            setIntervalX(()=>{
 
-                getCoordinates(id);
-            }, 5000, 5);
-        },
-        error : function(err) {
-            console.log(err);               
+        //SMS
+        if(request === 'sms')
+        {
+            let number = prompt("Please enter phone number");
+            console.log(number);
+            $.ajax({        
+                type : 'POST',
+                url : "/api/requestlocation",
+                data:{
+                    imei:imei,
+                    request:request,
+                    number:number
+                },
+                success : function(response) {
+                    //console.log(response);
+                  alert('Sms request sent');
+                  
+                },
+                error : function(err) {
+                    console.log(err);               
+                }
+            });
         }
-    });
+        else if(request === 'notification')
+        {
+            let notification = prompt("Enter message to send to phone");
+            console.log(notification);
+            $.ajax({        
+                type : 'POST',
+                url : "/api/requestlocation",
+                data:{
+                    imei:imei,
+                    request:request,
+                    notification:notification
+                },
+                success : function(response) {
+                    //console.log(response);
+                  alert('Notification sent');
+                  
+                },
+                error : function(err) {
+                    console.log(err);               
+                }
+            });
+        }
+        else {
+                //Location - Ring 
+            $.ajax({        
+                type : 'POST',
+                url : "/api/requestlocation",
+                data:{
+                    imei:imei,
+                    request:request,
+                },
+                success : function(response) {
+                    //console.log(response);
+                    if(request === 'location')
+                    {
+                    setIntervalX(()=>{
+
+                        getCoordinates(id);
+                    }, 5000, 5);
+                }
+                },
+                error : function(err) {
+                    console.log(err);               
+                }
+            });
+        }
+
+
+
       });
 
 
